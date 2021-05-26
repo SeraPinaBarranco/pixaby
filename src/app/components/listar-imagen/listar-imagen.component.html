@@ -1,1 +1,45 @@
-<p>listar-imagen works!</p>
+<app-spinner *ngIf="loading"></app-spinner>
+
+<div *ngIf="!loading" class="row row-cols-1 row-cols-md-4 g-4 mt-3">
+    <div *ngFor="let imagen of listImagenes" class="col">
+        <div class="card">
+            <img [src]="imagen.previewURL" class="card-img-top" alt="...">
+            <div class="card-body text-center">
+                <a [href]="imagen.largeImageURL" target="_blank" class="btn btn-primary">Ir a...</a>
+            </div>
+
+            <div class="card-footer text-muted text-center">
+                <div class="row">
+                    <div class="col">
+                        <p class="likesviews">Likes</p>
+                        <span class="badge badgelight spanlikes">{{imagen.likes}}</span>
+                    </div>
+                    <div class="col">
+                        <p class="likesviews">Views</p>
+                        <span class="badge badgelight spanlikes">{{imagen.views}}</span>
+                    </div>
+                </div>              
+                
+            </div>           
+
+        </div>
+    </div>
+</div>
+
+    
+    <div *ngIf="listImagenes.length > 0" class="d-flex justify-content-center mt-3">
+        <ul class="pagination pagination-lg">
+            {{paginaActual}}
+          <li *ngIf="paginaAnteriorClass()" class="page-item">
+            <a class="page-link" (click)="paginaAnterior()">&laquo;Anterior</a>
+          </li>
+          <li class="page-item">
+            <a *ngIf="paginaPosteriorClass()" class="page-link" (click)="paginaPosterior()">Posterior&raquo;</a>
+          </li>      
+        </ul>
+    </div>
+
+
+
+
+  

@@ -10,10 +10,16 @@ import { ImagenService } from 'src/app/services/imagen.service';
 export class ListarImagenComponent implements OnInit {
   termino='';
   susbcripcion: Subscription;
+  listImagenes: any[]= [];
+  loading= false;
+  imagenesPorPagina= 30;
+  paginaActual= 1;
+  calcularTotalPAginas=0;
 
   constructor(private _imagenService: ImagenService) {
     this.susbcripcion = this._imagenService.getTerminoBusqueda().subscribe(data =>{
       this.termino = data;
+      this.loading=true;
       this.obtenerImagenes();
     });
    }
@@ -23,8 +29,48 @@ export class ListarImagenComponent implements OnInit {
 
   obtenerImagenes(){
     this._imagenService.getImagenes(this.termino).subscribe(data=> {
-      console.log(data);
+      this.loading=false;
+      this.paginaActual=1;
+
+      if(data.hits.length === 0){
+        this._imagenService.setError("No se han encontrado resultados");
+        return;
+      }
+
+      this.calcularTotalPAginas = Math.ceil(data.totalHits/this.imagenesPorPagina);
+
+      this.listImagenes=data.hits;      
+
+    },error =>{
+      this._imagenService.setError("Ocurrió un error en el servidor");
+      this.loading=false;
+      return;
     });
   }
 
+  paginaAnterior(){
+    if(this.paginaActual > 1){
+      this.paginaActual --;
+    }
+  }
+
+  paginaPosterior(){
+    this.paginaActual ++;
+  }
+
+  paginaAnteriorClass(){
+    if(this.paginaActual > 1){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
+  paginaPosteriorClass(){
+    if(this.paginaActual === this.calcularTotalPAginas){
+      return false;
+    }else{
+      return true;
+    }
+  }
 }

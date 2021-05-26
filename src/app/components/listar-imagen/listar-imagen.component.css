@@ -1,0 +1,12 @@
+.spanlikes{
+    color:#eb6864;
+}
+
+.likesviews{
+    font-weight: bold;
+    margin-bottom: -4px;
+}
+
+a{
+    cursor: pointer;
+}
